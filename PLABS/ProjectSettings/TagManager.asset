@@ -6,6 +6,7 @@ TagManager:
   tags:
   - PhysicsBody
   - Clone
+  - Engine
   layers:
   - Default
   - TransparentFX

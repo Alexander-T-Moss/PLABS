@@ -352,6 +352,9 @@
 "Assets/Scripts/PhysicsEngine/PhysicsEngineController.cs"
 "Assets/Scripts/PhysicsEngine/PhysicsParameters.cs"
 "Assets/Scripts/PredictionEngine/PredictionEngine.cs"
+"Assets/Scripts/TimeEngine/PointInTime.cs"
+"Assets/Scripts/TimeEngine/TimeBody.cs"
+"Assets/Scripts/TimeEngine/TimeController.cs"
 -langversion:9.0
 
 /deterministic
