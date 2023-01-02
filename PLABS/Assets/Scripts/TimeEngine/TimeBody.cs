@@ -4,16 +4,18 @@ using UnityEngine.Profiling;
 
 public class TimeBody : MonoBehaviour
 {
+    private TimeController _timeController;
     public bool IsRewinding = false;
-    Rigidbody body;
+    private Rigidbody _rb;
     private Vector3 currentVelocity = new();
 
     List<PointInTime> pointsInTime;
 
     void Start()
     {
+        _timeController = GameObject.Find("TimeEngine").GetComponent<TimeController>();
         pointsInTime = new();
-        body = GetComponent<Rigidbody>();
+        _rb = GetComponent<Rigidbody>();
     }
 
     void Update()
@@ -22,6 +24,7 @@ public class TimeBody : MonoBehaviour
         {
             StartRewind();
         }
+
         else if (Input.GetKeyUp(KeyCode.Backspace))
         {
             StopRewind();
@@ -52,7 +55,7 @@ public class TimeBody : MonoBehaviour
         }
         else
         {
-            StopRewind();
+            Debug.Log("No more points to rewind back to!");
         }
     }
 
@@ -62,20 +65,21 @@ public class TimeBody : MonoBehaviour
         {
             pointsInTime.RemoveAt(pointsInTime.Count - 1);
         }
-        pointsInTime.Insert(0, new PointInTime(body.velocity, transform.position, transform.rotation));
+        pointsInTime.Insert(0, new PointInTime(_rb.velocity, transform.position, transform.rotation));
 
     }
 
     void StartRewind()
     {
         IsRewinding = true;
-        body.isKinematic = true;
+        _rb.isKinematic = true;
     }
 
     void StopRewind()
     {
         IsRewinding = false;
-        body.isKinematic = false;
-        body.velocity = currentVelocity;
+        if(!gameObject.GetComponent<PhysicsParameters>().Kinematic)
+            _rb.isKinematic = false;
+        _rb.velocity = currentVelocity;
     }
 }

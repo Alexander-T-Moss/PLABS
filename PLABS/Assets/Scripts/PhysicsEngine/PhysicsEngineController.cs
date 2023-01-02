@@ -12,6 +12,7 @@ public class PhysicsEngineController : MonoBehaviour
     private void Awake()
     {
         _PhysicsBodies = new();
+        Time.fixedDeltaTime = 0.01f;
     }
 
     private void FixedUpdate()

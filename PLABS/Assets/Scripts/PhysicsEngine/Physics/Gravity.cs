@@ -27,7 +27,6 @@ namespace Gravitation
 
             Vector3 direction = _body.position - _attractedBody.position;
             float seperationDistance = direction.magnitude;
-
             float forceMagnitude = 0;
 
             if(seperationDistance != 0 && seperationDistance <= SphereOfInfluence)
@@ -35,8 +34,6 @@ namespace Gravitation
                 forceMagnitude = _body.mass * _attractedBody.mass / Mathf.Pow(seperationDistance, 2) * gravitationalConstant;
 
             Vector3 force = direction.normalized * forceMagnitude;
-
-            //Debug.Log("Gravity: Adding force " + force.ToString() + " to " + _attractedGameObject.name + " from " + _gameObject.name);
             _attractedBody.AddForce(force, ForceMode.Force);
         }
     }

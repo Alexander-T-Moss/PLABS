@@ -12,6 +12,8 @@ public class PhysicsParameters : MonoBehaviour
     public bool Gravity = false;
     public Vector3 StartingVelocity;
 
+    public bool Kinematic = false;
+
 
     private void Awake()
     {
@@ -40,5 +42,7 @@ public class PhysicsParameters : MonoBehaviour
             _physicsEngineController.AddPhysicsBody(gameObject);
        else
             _physicsEngineController.RemovePhysicsBody(gameObject);
+
+       gameObject.GetComponent<Rigidbody>().isKinematic = Kinematic;
     }
 }
