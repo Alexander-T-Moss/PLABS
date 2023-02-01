@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PhysicsParameters : MonoBehaviour
 {
@@ -11,6 +12,11 @@ public class PhysicsParameters : MonoBehaviour
     // Modifiable Parameters
     public bool Gravity = false;
     public Vector3 StartingVelocity;
+    private Rigidbody _rigidBody;
+    private Transform _transform;
+
+    // UserInterface Parameters
+    private InputFieldController _posX, _posY, _posZ, _velX, _velY, _velZ, _mass;
 
     public bool Kinematic = false;
 
@@ -26,6 +32,7 @@ public class PhysicsParameters : MonoBehaviour
 
     private void Start()
     {
+        _rigidBody = gameObject.GetComponent<Rigidbody>();
         UpdateParameters();
     }
 
@@ -38,11 +45,13 @@ public class PhysicsParameters : MonoBehaviour
 
     public void UpdateParameters(bool disableAll = false)
     {
-       if(Gravity && !disableAll)
+        if(Gravity && !disableAll)
             _physicsEngineController.AddPhysicsBody(gameObject);
-       else
+        else
             _physicsEngineController.RemovePhysicsBody(gameObject);
 
-       gameObject.GetComponent<Rigidbody>().isKinematic = Kinematic;
+        _rigidBody.isKinematic = Kinematic;
+        _rigidBody.velocity = new(_velX.GetValue(), _velY.GetValue(), _velZ.GetValue());
+        transform.position = new(_posX.GetValue(), _posY.GetValue(), _posZ.GetValue());
     }
 }

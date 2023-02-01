@@ -28,10 +28,10 @@ public class PredictionEngine : MonoBehaviour
     private void OnEnable()
     {
         _physicsEngineController = GameObject.Find("PhysicsEngine").GetComponent<PhysicsEngineController>();
-        PredictTrajectories();
-        ClearTrajectoryPredictions();
+        //PredictTrajectories(5);
+        //ClearTrajectoryPredictions();
     }
-
+    
     // Runs every frame update
     private void Update()
     {
@@ -106,7 +106,7 @@ public class PredictionEngine : MonoBehaviour
     }
 
 
-    private void PredictTrajectories(int _steps = 2000)
+    private void PredictTrajectories(int _steps = 1000)
     {
         LoadGhostObjects();
 
