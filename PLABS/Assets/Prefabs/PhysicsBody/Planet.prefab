@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5105085112938835829}
   - component: {fileID: 2831391867470405040}
   - component: {fileID: 8355312545195628189}
-  - component: {fileID: 1006703146823116215}
+  - component: {fileID: 5151178464726244702}
   - component: {fileID: 6309795362035406951}
   - component: {fileID: 8207566759265536565}
   - component: {fileID: 1988371632103829224}
@@ -68,8 +68,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Gravity: 1
   StartingVelocity: {x: 0, y: 0, z: 0}
+  ParameterPanelPrefab: {fileID: 4212601642285565192, guid: f41d7b402b27c4dd29173911cc0f252d, type: 3}
   Kinematic: 0
---- !u!114 &1006703146823116215
+--- !u!114 &5151178464726244702
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -78,7 +79,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4901163612960191077}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f335f2f0637ad4194b2a74c64491a726, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f181dc7db8fd4092b608cfda2c5ae4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &6309795362035406951
@@ -93,7 +94,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af687dc38b47a48d0803da815f777d56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsRewinding: 0
+  Rewinding: 0
 --- !u!33 &8207566759265536565
 MeshFilter:
   m_ObjectHideFlags: 0

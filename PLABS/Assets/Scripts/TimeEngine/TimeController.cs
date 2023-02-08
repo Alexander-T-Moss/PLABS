@@ -8,24 +8,19 @@ public class TimeController : MonoBehaviour
     public float TimeModifier = 1f;
     private bool _pauseState = false;
     private bool _tempUnPause;
+    private float _timeRate = 1f;
 
-    private OverlayManager _overlayManager;
 
     public Toggle PauseToggle;
 
     // Called when scence is loaded
     private void Awake()
     {
-        Time.timeScale = 0f;
-        Pause(true);
+        Pause();
         PauseToggle = GameObject.Find("PauseToggle").GetComponent<Toggle>();
     }
 
-    private void Start()
-    {   
-        _overlayManager = GameObject.Find("OverlayManager").GetComponent<OverlayManager>();
-    }
-
+    // Set pause state
     public void SetPause(bool state)
     {
         if(state)
@@ -42,7 +37,7 @@ public class TimeController : MonoBehaviour
     }
 
     // Set if the simulation is paused
-    public void Pause(bool state, bool tempUnPause = false)
+    public void Pause(bool state = true, bool tempUnPause = false)
     {
         if(state)
         {
@@ -74,20 +69,14 @@ public class TimeController : MonoBehaviour
     // Adjusts timeScale
     void modifyTime(float adjustment)
     {
-        if(!_overlayManager.EditModeState())
+        if (Time.timeScale != adjustment && adjustment > 0)
         {
-            if (Time.timeScale != adjustment && adjustment > 0)
-            {
-                Time.timeScale = adjustment;
-                TimeModifier = adjustment;
-            }
-            else if(adjustment == 0)
-            {
-                Pause(true);
-            }
-
-            else
-                Debug.Log("modifyTime: Not an acceptable value for Time.timeScale");
+            Time.timeScale = adjustment;
+            TimeModifier = adjustment;
+        }
+        else if(adjustment == 0)
+        {
+            Pause(true);
         }
     } 
 
@@ -95,10 +84,10 @@ public class TimeController : MonoBehaviour
     private void Update()
     {
         // Pause toggle
-        if(Input.GetKeyDown(KeyCode.Space) && !_overlayManager.EditModeState())
+        if(Input.GetKeyDown(KeyCode.Space))
             Pause(!_pauseState);
 
-        else if(Input.GetKeyDown(KeyCode.Space) && !_overlayManager.EditModeState())
+        else if(Input.GetKeyDown(KeyCode.Space))
             Debug.Log("You can't unpause the simulation in edit mode!");
 
         if(Input.GetKeyDown(KeyCode.UpArrow))

@@ -54,7 +54,7 @@ public class PredictionEngine : MonoBehaviour
         {
             GhostGameObjects.Add(CreateClone(RealGameObjects[indexer], "predictionScene"));
 
-            // Only create trajectory lines for game objects that are no kinematic
+            // Only create trajectory lines for game objects that are not kinematic
             if(!RealGameObjects[indexer].GetComponent<Rigidbody>().isKinematic)
                 TrajectoryLines.Add(CreateTrajectoryLine(RealGameObjects[indexer].name + "'s Trajectory Line"));
             else
@@ -84,7 +84,7 @@ public class PredictionEngine : MonoBehaviour
         _clonedGameObject.tag = "Clone";
         _clonedGameObject.GetComponent<MeshRenderer>().enabled = false;
         _clonedGameObject.GetComponent<Rigidbody>().velocity = _gameObjectToBeCloned.GetComponent<Rigidbody>().velocity;
-        _clonedGameObject.GetComponent<PhysicsParameters>().UpdateParameters();
+        _clonedGameObject.GetComponent<PhysicsParameters>().UpdateParameters(false);
 
         return _clonedGameObject;
     }

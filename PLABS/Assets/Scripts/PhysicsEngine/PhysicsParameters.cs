@@ -16,17 +16,30 @@ public class PhysicsParameters : MonoBehaviour
     private Transform _transform;
 
     // UserInterface Parameters
-    private InputFieldController _posX, _posY, _posZ, _velX, _velY, _velZ, _mass;
+    public GameObject ParameterPanelPrefab;
+    private GameObject _parameterPanel;
+    private Transform _editingPanel;
 
     public bool Kinematic = false;
 
 
     private void Awake()
     {
+        // Checks if gameObject isn't a clone
         if(gameObject.CompareTag("PhysicsBody"))
+        {
             gameObject.GetComponent<Rigidbody>().velocity = StartingVelocity;
+            _editingPanel = GameObject.Find("Editing Panel").GetComponent<Transform>();
+            _parameterPanel = Instantiate(ParameterPanelPrefab, _editingPanel);
+            _parameterPanel.name = gameObject.name + " ParameterPanel";
+            GameObjectEditingPanel gameObjectEditingPanel = _parameterPanel.GetComponent<GameObjectEditingPanel>();
+            gameObjectEditingPanel.SetHeader(gameObject.name);
+            gameObjectEditingPanel.SetGameObject(gameObject);
+            _parameterPanel.SetActive(false);
+        }
 
         _physicsEngineController = GameObject.Find("PhysicsEngine").GetComponent<PhysicsEngineController>();
+        _rigidBody = gameObject.GetComponent<Rigidbody>();
     }
 
 
@@ -39,6 +52,7 @@ public class PhysicsParameters : MonoBehaviour
 
     private void OnDestroy()
     {
+        // Reset parameters
         UpdateParameters(true);
     }
 
@@ -51,7 +65,26 @@ public class PhysicsParameters : MonoBehaviour
             _physicsEngineController.RemovePhysicsBody(gameObject);
 
         _rigidBody.isKinematic = Kinematic;
-        _rigidBody.velocity = new(_velX.GetValue(), _velY.GetValue(), _velZ.GetValue());
-        transform.position = new(_posX.GetValue(), _posY.GetValue(), _posZ.GetValue());
+
+        Debug.Log("Updated parameters for: " + gameObject.name);
+
+        //GameObjectEditingPanel gameObjectEditingPanel = _parameterPanel.GetComponent<GameObjectEditingPanel>();
+        //GetComponent<Rigidbody>().velocity = gameObjectEditingPanel.GetVelocity();
+        //GetComponent<Transform>().position = gameObjectEditingPanel.GetPosition();
+    }
+
+
+    public void UpdateParameterPanel()
+    {
+        GameObjectEditingPanel gameObjectEditingPanel = _parameterPanel.GetComponent<GameObjectEditingPanel>();
+        gameObjectEditingPanel.SetVelocity(GetComponent<Rigidbody>().velocity);
+        gameObjectEditingPanel.SetPosition(GetComponent<Transform>().position);
+        Debug.Log("Updated parameter panel for: " + gameObject.name);
+    }
+
+
+    public GameObject GetParameterPanel()
+    {
+        return _parameterPanel;
     }
 }
