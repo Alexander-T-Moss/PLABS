@@ -5,10 +5,14 @@ using UnityEngine.UI;
 
 public class TimeController : MonoBehaviour
 {
+    private SimulationManager _simulationManager;
     public float TimeModifier = 1f;
     private bool _pauseState = false;
     private bool _tempUnPause;
     private float _timeRate = 1f;
+
+    // Link to OverlayManager
+    private OverlayManager _overlayManager;
 
 
     public Toggle PauseToggle;
@@ -16,8 +20,15 @@ public class TimeController : MonoBehaviour
     // Called when scence is loaded
     private void Awake()
     {
-        Pause();
+        // Find OverlayManager
+        _simulationManager = GameObject.Find("SimulationManager").GetComponent<SimulationManager>();
+        _overlayManager = GameObject.Find("OverlayManager").GetComponent<OverlayManager>();
         PauseToggle = GameObject.Find("PauseToggle").GetComponent<Toggle>();
+    }
+
+    private void Start()
+    {
+        Pause();
     }
 
     // Set pause state
@@ -84,7 +95,7 @@ public class TimeController : MonoBehaviour
     private void Update()
     {
         // Pause toggle
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.Space) && _simulationManager.GetSimulationState() == "Running")
             Pause(!_pauseState);
 
         else if(Input.GetKeyDown(KeyCode.Space))

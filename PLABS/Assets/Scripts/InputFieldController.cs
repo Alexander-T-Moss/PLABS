@@ -11,7 +11,6 @@ public class InputFieldController : MonoBehaviour
     {
         _inputField = gameObject.GetComponent<TMP_InputField>();
         _inputField.contentType = TMP_InputField.ContentType.DecimalNumber;
-        SetValue(-1);
     }
 
     public float GetValue()

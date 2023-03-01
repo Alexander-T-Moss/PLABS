@@ -17,11 +17,6 @@ public class GameObjectSelecting : MonoBehaviour
         _panelSpawner = GameObject.Find("OverlayCanvas").GetComponent<PanelSpawner>();
     }
 
-    private void Start()
-    {
-        ParameterPanel = _panelSpawner.AddPanel(PanelPrefab, gameObject);
-    }
-
     // OnMouseEnter is called when cursor is over GameObject
     private void OnMouseEnter()
     {

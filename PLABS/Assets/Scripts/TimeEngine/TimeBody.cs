@@ -4,11 +4,14 @@ using UnityEngine.Profiling;
 
 public class TimeBody : MonoBehaviour
 {
+    private SimulationManager _simulationManager;
+
     // Public Variable
     public bool Rewinding = false;
 
     // Private Variables
     private TimeController _timeController;
+    private OverlayManager _overlayManager;
     private Rigidbody _rb;
     private Vector3 _currentVelocity = new();
 
@@ -19,7 +22,9 @@ public class TimeBody : MonoBehaviour
     private void OnEnable()
     {
         // Assign the simulations TimeController to _timeController
+        _simulationManager = GameObject.Find("SimulationManager").GetComponent<SimulationManager>();
         _timeController = GameObject.Find("TimeEngine").GetComponent<TimeController>();
+        _overlayManager = GameObject.Find("OverlayManager").GetComponent<OverlayManager>();
     }
 
     // Called before the first frame update
@@ -35,19 +40,20 @@ public class TimeBody : MonoBehaviour
     // Called every frame update
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Backspace))
+        if(_simulationManager.IsRewinding() && !Rewinding)
             StartRewind();
-
-        else if (Input.GetKeyUp(KeyCode.Backspace))
+        else if (!_simulationManager.IsRewinding() && Rewinding)
             StopRewind();
     }
 
     void FixedUpdate()
     {
+        // Rewind if Rewinding = true
         if (Rewinding)
             Rewind();
 
-        else
+        // Record if not rewinding or in edit mode
+        else if(_simulationManager.GetSimulationState() == "Running")
             Record();
     }
 
@@ -59,12 +65,9 @@ public class TimeBody : MonoBehaviour
             _currentVelocity = pointInTime.Velocity;
             transform.SetPositionAndRotation(pointInTime.Position, pointInTime.Rotation);
             pointsInTime.RemoveAt(0);
-            Debug.Log("Rewinding");
         }
         else
-        {
             Debug.Log("No more points to rewind back to!");
-        }
     }
 
     // Records the position of the gameObject using pointsInTime
@@ -78,7 +81,7 @@ public class TimeBody : MonoBehaviour
         pointsInTime.Insert(0, new PointInTime(_rb.velocity, transform.position, transform.rotation));
     }
 
-    void StartRewind()
+    public void StartRewind()
     {
         Rewinding = true;
         _rb.isKinematic = true;
@@ -87,14 +90,13 @@ public class TimeBody : MonoBehaviour
             _timeController.Pause(false, true);
     }
 
-    void StopRewind()
+    public void StopRewind()
     {
         Rewinding = false;
         _rb.velocity = _currentVelocity;
 
-        // Set the gameObject as not kinematic if it was not kinematic before the simulation was run
-        if(!gameObject.GetComponent<PhysicsParameters>().Kinematic)
-            _rb.isKinematic = false;
+        // Restore kinematic state of gameObject
+        _rb.isKinematic = gameObject.GetComponent<PhysicsParameters>().Kinematic;
 
         // Return simulation to pause state before it was rewinding
         if(_timeController.WasPaused())

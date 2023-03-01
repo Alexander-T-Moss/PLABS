@@ -113,6 +113,7 @@
 -define:ENABLE_TERRAIN
 -define:ENABLE_TILEMAP
 -define:ENABLE_TIMELINE
+-define:ENABLE_INPUT_SYSTEM
 -define:ENABLE_LEGACY_INPUT_MANAGER
 -define:CSHARP_7_OR_LATER
 -define:CSHARP_7_3_OR_NEWER
@@ -348,20 +349,27 @@
 -r:"Library/Bee/artifacts/200b0aE.dag/Unity.VSCode.Editor.ref.dll"
 -r:"Library/Bee/artifacts/200b0aE.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/200b0aE.dag/UnityEngine.UI.ref.dll"
+"Assets/Scripts/Cameras/CameraManager.cs"
+"Assets/Scripts/Cameras/CameraSpawner.cs"
+"Assets/Scripts/Cameras/FollowCam.cs"
 "Assets/Scripts/GameObject Panel.cs"
-"Assets/Scripts/GameObjectEditingPanel.cs"
 "Assets/Scripts/GameObjectSelecting.cs"
 "Assets/Scripts/InputFieldController.cs"
-"Assets/Scripts/OverlayManager.cs"
-"Assets/Scripts/PanelSpawner.cs"
+"Assets/Scripts/OverlayManager/OverlayManager.cs"
+"Assets/Scripts/OverlayManager/PanelSpawner.cs"
+"Assets/Scripts/OverlayManager/TrajectoryLine.cs"
 "Assets/Scripts/PhysicsEngine/Physics/Gravity.cs"
+"Assets/Scripts/PhysicsEngine/PhysicsEngine.cs"
 "Assets/Scripts/PhysicsEngine/PhysicsEngineController.cs"
 "Assets/Scripts/PhysicsEngine/PhysicsParameters.cs"
 "Assets/Scripts/PredictionEngine/PredictionEngine.cs"
+"Assets/Scripts/SimulationManager/GameObjectSpawner.cs"
+"Assets/Scripts/SimulationManager/SimulationManager.cs"
 "Assets/Scripts/TimeEngine/PointInTime.cs"
 "Assets/Scripts/TimeEngine/TimeBody.cs"
 "Assets/Scripts/TimeEngine/TimeController.cs"
 "Assets/Scripts/UserInterface/BackgroundRotator.cs"
+"Assets/Scripts/UserInterface/Data Panel/DataPanel.cs"
 "Assets/Scripts/UserInterface/GameObjectSelector.cs"
 "Assets/Scripts/UserInterface/Menus/MainMenuScript.cs"
 "Assets/Scripts/UserInterface/Menus/MenuManager.cs"
@@ -369,6 +377,7 @@
 "Assets/Scripts/UserInterface/Menus/Settings Menu/GeneralSettings.cs"
 "Assets/Scripts/UserInterface/Menus/Settings Menu/Graphics Settings.cs"
 "Assets/Scripts/UserInterface/Menus/StartMenu.cs"
+"Assets/Scripts/UserInterface/Parameter Panel/ParameterPanel.cs"
 "Assets/Scripts/UserInterface/TextFadeInOut.cs"
 "Assets/Scripts/UserInterface/Transitions/ChangePanel.cs"
 "Assets/Scripts/UserInterface/Transitions/ZoomThrough.cs"

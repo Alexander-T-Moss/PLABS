@@ -6,18 +6,18 @@ using Gravitation;
 
 public class PhysicsEngineController : MonoBehaviour
 {
-    public List<GameObject> _PhysicsBodies;
+    public List<GameObject> _PhysicsBodies = new();
     private Gravity _gravity = new();   
 
     private void Awake()
     {
-        _PhysicsBodies = new();
         Time.fixedDeltaTime = 0.01f;
     }
 
+
     private void FixedUpdate()
     {
-        PhysicsEngineUpdate();        
+        PhysicsEngineUpdate();
     }
 
     public void PhysicsEngineUpdate(string tagFilter = null)
@@ -42,7 +42,10 @@ public class PhysicsEngineController : MonoBehaviour
     public void AddPhysicsBody(GameObject body)
     {
         if(!_PhysicsBodies.Contains(body))
+        {
             _PhysicsBodies.Add(body);
+            body.GetComponent<PhysicsParameters>().UpdateParameters();
+        }
     }
 
     public void RemovePhysicsBody(GameObject body)

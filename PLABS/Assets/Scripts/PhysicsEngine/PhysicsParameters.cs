@@ -3,88 +3,114 @@ using UnityEngine.UI;
 
 public class PhysicsParameters : MonoBehaviour
 {
-    // Variables for PhysicsParameters
+    public float Mass;
+    public Vector3 Position;
+    public Vector3 Velocity;
+    public bool Kinematic = false;
 
-    // Link to PhysicsEngine
-    private GameObject _physicsEngineObject;
-    private PhysicsEngineController _physicsEngineController;
-
-    // Modifiable Parameters
-    public bool Gravity = false;
-    public Vector3 StartingVelocity;
     private Rigidbody _rigidBody;
     private Transform _transform;
 
-    // UserInterface Parameters
-    public GameObject ParameterPanelPrefab;
-    private GameObject _parameterPanel;
-    private Transform _editingPanel;
+    private PhysicsEngine _physicsEngine;
+    private OverlayManager _overlayManager;
+    private SimulationManager _simulationManager;
+    private CameraManager _cameraManager;
 
-    public bool Kinematic = false;
-
+    private ParameterPanel _parameterPanel;
+    private DataPanel _dataPanel;
+    private FollowCam _followCam;
 
     private void Awake()
     {
-        // Checks if gameObject isn't a clone
-        if(gameObject.CompareTag("PhysicsBody"))
-        {
-            gameObject.GetComponent<Rigidbody>().velocity = StartingVelocity;
-            _editingPanel = GameObject.Find("Editing Panel").GetComponent<Transform>();
-            _parameterPanel = Instantiate(ParameterPanelPrefab, _editingPanel);
-            _parameterPanel.name = gameObject.name + " ParameterPanel";
-            GameObjectEditingPanel gameObjectEditingPanel = _parameterPanel.GetComponent<GameObjectEditingPanel>();
-            gameObjectEditingPanel.SetHeader(gameObject.name);
-            gameObjectEditingPanel.SetGameObject(gameObject);
-            _parameterPanel.SetActive(false);
-        }
+        _simulationManager = GameObject.Find("SimulationManager").GetComponent<SimulationManager>();
+        _overlayManager = GameObject.Find("OverlayManager").GetComponent<OverlayManager>();
+        _physicsEngine = GameObject.Find("PhysicsEngine").GetComponent<PhysicsEngine>();
+        _cameraManager = GameObject.Find("CameraManager").GetComponent<CameraManager>();
 
-        _physicsEngineController = GameObject.Find("PhysicsEngine").GetComponent<PhysicsEngineController>();
         _rigidBody = gameObject.GetComponent<Rigidbody>();
+        _transform = gameObject.GetComponent<Transform>();
     }
 
-
-    private void Start()
+    public void InitializePhysicsBody()
     {
-        _rigidBody = gameObject.GetComponent<Rigidbody>();
-        UpdateParameters();
+        _parameterPanel = _overlayManager.NewParameterPanel(gameObject);
+        _dataPanel = _overlayManager.NewDataPanel(gameObject);
+        _cameraManager.MakeNewFollowCam(gameObject);
+        UpdatePhysicsParameters();
     }
 
 
+    private void OnEnable()
+    {
+        Mass = _rigidBody.mass;
+        Position = _transform.position;
+        Velocity = _rigidBody.velocity;
+        Kinematic = _rigidBody.isKinematic;
+    }
+
+    // Ran when gameObject is destroyed
     private void OnDestroy()
     {
-        // Reset parameters
-        UpdateParameters(true);
+        if(gameObject.CompareTag("PhysicsBody"))
+            _physicsEngine.RemovePhysicsBody(gameObject);
     }
 
-
-    public void UpdateParameters(bool disableAll = false)
+    // Apply parameters to gameObject
+    public void UpdateParameters()
     {
-        if(Gravity && !disableAll)
-            _physicsEngineController.AddPhysicsBody(gameObject);
-        else
-            _physicsEngineController.RemovePhysicsBody(gameObject);
-
+        _rigidBody.mass = Mass;
+        _rigidBody.velocity = Velocity;
         _rigidBody.isKinematic = Kinematic;
-
-        Debug.Log("Updated parameters for: " + gameObject.name);
-
-        //GameObjectEditingPanel gameObjectEditingPanel = _parameterPanel.GetComponent<GameObjectEditingPanel>();
-        //GetComponent<Rigidbody>().velocity = gameObjectEditingPanel.GetVelocity();
-        //GetComponent<Transform>().position = gameObjectEditingPanel.GetPosition();
+        _transform.position = Position;
+        Physics.SyncTransforms();
     }
 
+    public void UpdatePhysicsParameters()
+    {
+        Mass = _rigidBody.mass;
+        Velocity = _rigidBody.velocity;
+        Kinematic = _rigidBody.isKinematic;
+        Position = _transform.position;
+    }
 
+    // Update values in parameter panel
     public void UpdateParameterPanel()
     {
-        GameObjectEditingPanel gameObjectEditingPanel = _parameterPanel.GetComponent<GameObjectEditingPanel>();
-        gameObjectEditingPanel.SetVelocity(GetComponent<Rigidbody>().velocity);
-        gameObjectEditingPanel.SetPosition(GetComponent<Transform>().position);
-        Debug.Log("Updated parameter panel for: " + gameObject.name);
+        UpdatePhysicsParameters();
+        _parameterPanel.SetMass(_rigidBody.mass);
+        _parameterPanel.SetVelocity(_rigidBody.velocity);
+        _parameterPanel.SetPosition(transform.position);
     }
 
+    public void UpdateDataPanel()
+    {
+        _dataPanel.SetMass(_rigidBody.mass);
+        _dataPanel.SetVelocity(_rigidBody.velocity);
+        _dataPanel.SetPosition(transform.position);
+    }
 
-    public GameObject GetParameterPanel()
+    public void SetFollowCam(FollowCam followCam)
+    {
+        _followCam = followCam;
+    }
+
+    public FollowCam GetFollowCam()
+    {
+        return _followCam;
+    }
+
+    public GameObject GetGameObject()
+    {
+        return gameObject;
+    }
+
+    public ParameterPanel GetParameterPanel()
     {
         return _parameterPanel;
+    }
+
+    public DataPanel GetDataPanel()
+    {
+        return _dataPanel;
     }
 }
